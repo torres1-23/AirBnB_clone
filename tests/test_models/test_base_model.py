@@ -13,7 +13,7 @@ import unittest
 class TestBase01(unittest.TestCase):
     """Check instantiation of BaseModel instances."""
     def test_01(self):
-        """Checks right isntantiation of BaseModel"""
+        """Checks right instantiation of BaseModel"""
         base1 = BaseModel()
         self.assertEqual(base1.__class__.__name__, 'BaseModel')
         self.assertEqual(type(base1), BaseModel)
@@ -24,3 +24,7 @@ class TestBase01(unittest.TestCase):
 
     def test_02(self):
         base2 = BaseModel()
+        self.assertNotEqual(base1.id, base2.id)
+        sleep(2)
+        base2.save()
+        self.assertNotEqual(base2.created_at, base2.updated_at)
