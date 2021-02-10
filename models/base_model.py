@@ -18,8 +18,8 @@ class BaseModel:
 
         Attributes:
             id (str): Unique ID for each instance.
-            created_at (datetime): datetime of creation of instance.
-            updated_at (datetime): datetime of update of instance.
+            created_at (datetime): assigns current datetime.
+            updated_at (datetime): updates datetime when objects change.
         """
         if kwargs:
             for key, value in kwargs.items():
