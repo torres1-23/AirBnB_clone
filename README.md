@@ -55,7 +55,7 @@ Classes inherited from Base Model:
 * [state.py](/models/state.py)
 * [user.py](/models/user.py)
 
-#### `/models/engine` directory contains File Storage class that handles JASON serialization and deserialization :
+#### `/models/engine` directory contains File Storage class that handles JSON serialization and deserialization :
 [file_storage.py](/models/engine/file_storage.py) - serializes instances to a JSON file & deserializes back to instances
 * `def all(self)` - returns the dictionary __objects
 * `def new(self, obj)` - sets in __objects the obj with key <obj class name>.id
@@ -113,14 +113,14 @@ TestBaseModel class:
 * `def test_review_module_docstring(self)` - Test for the review.py module docstring
 * `def test_review_class_docstring(self)` - Test for the Review class docstring
 
-[/test_models/state.py](/tests/test_models/test_state.py) - Contains the TestStateDocs class:
+[/test_models/test_state.py](/tests/test_models/test_state.py) - Contains the TestStateDocs class:
 * `def setUpClass(cls)` - Set up for the doc tests
 * `def test_pep8_conformance_state(self)` - Test that models/state.py conforms to PEP8
 * `def test_pep8_conformance_test_state(self)` - Test that tests/test_models/test_state.py conforms to PEP8
 * `def test_state_module_docstring(self)` - Test for the state.py module docstring
 * `def test_state_class_docstring(self)` - Test for the State class docstring
 
-[/test_models/user.py](/tests/test_models/test_user.py) - Contains the TestUserDocs class:
+[/test_models/test_user.py](/tests/test_models/test_user.py) - Contains the TestUserDocs class:
 * `def setUpClass(cls)` - Set up for the doc tests
 * `def test_pep8_conformance_user(self)` - Test that models/user.py conforms to PEP8
 * `def test_pep8_conformance_test_user(self)` - Test that tests/test_models/test_user.py conforms to PEP8
