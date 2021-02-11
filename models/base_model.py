@@ -7,7 +7,7 @@ Usage:
 """
 import uuid
 from datetime import datetime
-from models import storage
+import models
 
 iso_time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -26,13 +26,13 @@ class BaseModel:
             for key, value in kwargs.items():
                 if key != "__class__":
                     if key == "created_at" or key == "updated_at":
-                        value = datetime.strptime(value, time)
+                        value = datetime.strptime(value, iso_time)
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """Creates string representation of instance.
@@ -48,7 +48,7 @@ class BaseModel:
         datetime and saves the instances to a file.
         """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """Creates a dictionary containing all keys/values of __dict__ of the
