@@ -8,6 +8,15 @@ Usage:
 import json
 from models.base_model import BaseModel
 
+classes = {
+    "BaseModel": BaseModel
+    #"User": User,
+    #"State": State,
+    #"City": City,
+    #"Amenity": Amenity,
+    #"Place": Place
+    }
+
 
 class FileStorage:
     """Serializes instances to a JSON file and deserializes JSON file to
@@ -46,6 +55,7 @@ class FileStorage:
             with open(FileStorage.__file_path, "r", encoding='UTF8') as s_file:
                 FileStorage.__objects = json.load(s_file)
             for obj in FileStorage.__objects.values():
-                self.new(BaseModel(**obj))
+                if obj.__class__.__name__ in classes:
+                    self.new(class_dict[obj.__class__.__name__](**obj))
         except FileNotFoundError:
             return
