@@ -5,10 +5,18 @@ Usage:
     "HBNBCommand" contains the entry point of the command interpreter,
     uses the cmd module.
 """
+import shlex
 import cmd
 from models.base_model import BaseModel
+from models import storage
 
 classes = {"BaseModel": BaseModel}
+class_dict = storage.all()
+
+
+def parsing(args):
+    """Returns a parsed version of the args"""
+    return shlex.split(args)
 
 
 class HBNBCommand(cmd.Cmd):
@@ -23,6 +31,41 @@ class HBNBCommand(cmd.Cmd):
             instance = classes[args]()
             print(instance.id)
             instance.save()
+        else:
+            print("** class doesn't exist **")
+
+    def do_show(self, args):
+        """[show <class name> <id>]: Prints an instance as a string"""
+        arg = parsing(args)
+        if len(arg[0]) == 0:
+            print("** class name missing **")
+        if arg[0] in classes.keys():
+            if len(arg) == 2:
+                key = arg[0] + "." + arg[1]
+                if key in class_dict:
+                    print(class_dict[key])
+                else:
+                    print("** no instance found **")
+            else:
+                print("** instance id missing **")
+        else:
+            print("** class doesn't exist **")
+
+    def do_destroy(self, args):
+        """[destroy <class name> <id>]: Deletes an instance"""
+        arg = parsing(args)
+        if len(arg[0]) == 0:
+            print("** class name missing **")
+        if arg[0] in classes.keys():
+            if len(arg) == 2:
+                key = arg[0] + "." + arg[1]
+                if key in class_dict:
+                    del(class_dict[key])
+                    storage.save()
+                else:
+                    print("** no instance found **")
+            else:
+                print("** instance id missing **")
         else:
             print("** class doesn't exist **")
 
