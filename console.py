@@ -69,6 +69,23 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
+    def do_all(self, args):
+        """[all <class name> / all]: Prints all string repr of all instances"""
+        arg = parsing(args)
+        list_all = []
+        if len(arg) == 0:
+            for value in class_dict.values():
+                list_all.append(str(value))
+            print(list_all)
+        elif arg[0] in classes:
+            for key in class_dict.keys():
+                obj = class_dict[key]
+                if arg[0] == obj.__class__.__name__:
+                    list_all.append(str(obj))
+            print(list_all)
+        else:
+            print("** class doesn't exist **")
+
     def do_quit(self, line):
         """[quit]: Exits the program."""
         return True
