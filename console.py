@@ -10,7 +10,14 @@ import cmd
 from models.base_model import BaseModel
 from models import storage
 
-classes = {"BaseModel": BaseModel}
+classes = {
+    "BaseModel": BaseModel
+    #"User": User,
+    #"State": State,
+    #"City": City,
+    #"Amenity": Amenity,
+    #"Place": Place
+    }
 class_dict = storage.all()
 
 
@@ -71,26 +78,56 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """[all <class name> / all]: Prints all string repr of all instances"""
-        arg = parsing(args)
         list_all = []
-        if len(arg) == 0:
+        if not args:
             for value in class_dict.values():
                 list_all.append(str(value))
             print(list_all)
-        elif arg[0] in classes:
+        elif args in classes:
             for key in class_dict.keys():
                 obj = class_dict[key]
-                if arg[0] == obj.__class__.__name__:
+                if args == obj.__class__.__name__:
                     list_all.append(str(obj))
             print(list_all)
         else:
             print("** class doesn't exist **")
 
-    def do_quit(self, line):
+    def do_update(self, args):
+        """[update <class name> <id> <attribute name> "<attribute value>"]:
+        Updates an attribute of an instance."""
+        arg = parsing(args)
+        try:
+            if arg[0] in classes.keys():
+                key = arg[0] + "."
+            else:
+                print("** class doesn't exist **")
+                return
+        except IndexError:
+            print("** class name missing **")
+            return
+        try:
+            key += arg[1]
+            if key in class_dict:
+                obj = class_dict[key]
+            else:
+                print("** no instance found **")
+                return
+        except IndexError:
+            print("** instance id missing **")
+            return
+        if len(arg) == 2:
+            print("** attribute name missing **")
+        elif len(arg) == 3:
+            print("** value missing **")
+        else:
+            setattr(obj, arg[2], type(arg[2])(arg[3]))
+            storage.save()
+
+    def do_quit(self, args):
         """[quit]: Exits the program."""
         return True
 
-    def do_EOF(self, line):
+    def do_EOF(self, args):
         """EOF signal to exit the console."""
         print()
         return True
