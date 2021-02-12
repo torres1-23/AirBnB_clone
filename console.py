@@ -6,18 +6,32 @@ Usage:
     uses the cmd module.
 """
 import cmd
+from models.base_model import BaseModel
+
+classes = {"BaseModel": BaseModel}
 
 
 class HBNBCommand(cmd.Cmd):
     """HBNB console entry point"""
     prompt = "(hbnb) "
 
+    def do_create(self, args):
+        """[create <class name>]: Creates a new instance of a class."""
+        if len(args) == 0:
+            print("** class name missing **")
+        elif args in classes.keys():
+            instance = classes[args]()
+            print(instance.id)
+            instance.save()
+        else:
+            print("** class doesn't exist **")
+
     def do_quit(self, line):
-        """Quit command to exit the program"""
+        """[quit]: Exits the program."""
         return True
 
     def do_EOF(self, line):
-        """EOF signal to exit the console"""
+        """EOF signal to exit the console."""
         print()
         return True
 
