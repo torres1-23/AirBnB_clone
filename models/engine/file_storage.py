@@ -7,10 +7,12 @@ Usage:
 """
 import json
 from models.base_model import BaseModel
+from models.user import User
+
 
 classes = {
-    "BaseModel": BaseModel
-    #"User": User,
+    "BaseModel": BaseModel,
+    "User": User
     #"State": State,
     #"City": City,
     #"Amenity": Amenity,
@@ -31,18 +33,18 @@ class FileStorage:
         Return:
             Dictionary of objects.
         """
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
         if obj is not None:
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
-            FileStorage.__objects[key] = obj
+            self.__objects[key] = obj
 
     def save(self):
         """Serializes __objects to the JSON file"""
         new_dict = {}
-        dicti = FileStorage.__objects
+        dicti = self.__objects
         for key, value in dicti.items():
             dic = value.to_dict()
             new_dict[key] = dic
@@ -53,9 +55,9 @@ class FileStorage:
         """Deserializes the JSON file to __objects"""
         try:
             with open(FileStorage.__file_path, "r", encoding='UTF8') as s_file:
-                FileStorage.__objects = json.load(s_file)
-            for obj in FileStorage.__objects.values():
-                if obj.__class__.__name__ in classes:
-                    self.new(class_dict[obj.__class__.__name__](**obj))
+                json_obj = json.load(s_file)
+            for obj in json_obj.values():
+                if obj["__class__"] in classes:
+                    self.new(classes[obj["__class__"]](**obj))
         except FileNotFoundError:
             return

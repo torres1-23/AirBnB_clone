@@ -8,11 +8,12 @@ Usage:
 import shlex
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 classes = {
-    "BaseModel": BaseModel
-    #"User": User,
+    "BaseModel": BaseModel,
+    "User": User
     #"State": State,
     #"City": City,
     #"Amenity": Amenity,
