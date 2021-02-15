@@ -5,7 +5,7 @@ Usage:
     "HBNBCommand" contains the entry point of the command interpreter,
     uses the cmd module.
 """
-import shlex
+from shlex import split
 import cmd
 from models.base_model import BaseModel
 from models.user import User
@@ -22,7 +22,7 @@ class_dict = storage.all()
 
 def parsing(args):
     """Returns a parsed version of the args"""
-    return shlex.split(args)
+    return split(args)
 
 
 class HBNBCommand(cmd.Cmd):
@@ -94,52 +94,64 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, args):
         """[update <class name> <id> <attribute name> "<attribute value>"]:
         Updates an attribute of an instance."""
-        arg = parsing(args)
-        integers = ["number_rooms", "number_bathrooms", "max_guest",
-                    "price_by_night"]
-        floats = ["latitude", "longitude"]
+        try:
+            arg = parsing(args)
+            integers = ["number_rooms", "number_bathrooms", "max_guest",
+                        "price_by_night"]
+            floats = ["latitude", "longitude"]
 
-        try:
-            if arg[0] in classes.keys():
-                key = arg[0] + "."
-            else:
-                print("** class doesn't exist **")
+            try:
+                if arg[0] in classes.keys():
+                    key = arg[0] + "."
+                else:
+                    print("** class doesn't exist **")
+                    return
+            except IndexError:
+                print("** class name missing **")
                 return
-        except IndexError:
-            print("** class name missing **")
-            return
-        try:
-            key += arg[1]
-            if key in class_dict:
-                obj = class_dict[key]
-            else:
-                print("** no instance found **")
+            try:
+                key += arg[1]
+                if key in class_dict:
+                    obj = class_dict[key]
+                else:
+                    print("** no instance found **")
+                    return
+            except IndexError:
+                print("** instance id missing **")
                 return
-        except IndexError:
-            print("** instance id missing **")
-            return
-        if len(arg) == 2:
-            print("** attribute name missing **")
-        elif len(arg) == 3:
-            print("** value missing **")
-        else:
-            arg_test = args.split("\"")
-            arg_zero = arg_test[0].split()
-            if len(arg_zero) == 3 :
-                if arg[2] in integers:
-                    try:
-                        arg[3] = int(arg[3])
-                    except:
-                        print("*** Wrong type: {}".format(arg[3]))
-                if arg[2] in floats:
-                    try:
-                        arg[3] = float(arg[3])
-                    except:
-                        print("*** Wrong type: {}".format(arg[3]))
-                setattr(obj, arg[2], arg[3])
-                storage.save()
+            if len(arg) == 2:
+                print("** attribute name missing **")
+            elif len(arg) == 3:
+                print("** value missing **")
             else:
-                print("*** Unknown syntax: {}".format(args))
+                arg_test = args.split("\"")
+                arg_zero = split(arg_test[0])
+                if len(arg_zero) == 3:
+                    if arg[2] in integers:
+                        try:
+                            arg[3] = int(arg[3])
+                        except:
+                            print("*** Wrong type: {}".format(arg[3]))
+                    if arg[2] in floats:
+                        try:
+                            arg[3] = float(arg[3])
+                        except:
+                            print("*** Wrong type: {}".format(arg[3]))
+                    setattr(obj, arg[2], arg[3])
+                    storage.save()
+                else:
+                    print("*** Unknown syntax: {}".format(args))
+        except ValueError:
+            print("*** Unknown syntax: {}".format(args))
+
+    def do_count(self, args):
+        """[<class name>.count()]: Retrieves number of instances of a class"""
+        count = 0
+        if args in classes:
+            for obj in class_dict.values():
+                if args == obj.__class__.__name__:
+                    count += 1
+        print(count)
 
     def do_quit(self, args):
         """[quit]: Exits the program."""
@@ -153,6 +165,36 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Doesn't execute anything when there is an empty line"""
         pass
+
+    def precmd(self, args):
+        """Parses alternative input format"""
+        open_par = args.count("(")
+        closed_par = args.count(")")
+        if open_par == 1 and closed_par == 1:
+            parse_dot = args.split(".")
+            class_name = parse_dot[0]
+            cmd_attributes = parse_dot[1]
+            parse_par = cmd_attributes.split("(")
+            command = parse_par[0]
+            arg_par = parse_par[1]
+            arg_nopar = arg_par[:-1]
+            parse_args = split(arg_nopar)
+            if command != "update":
+                return command + " " + class_name + " " + " ".join(parse_args)
+            else:
+                if len(parse_args) == 3:
+                    value = parse_args[-1]
+                    arg_string = " ".join(parse_args[0:2])
+                    arguments = arg_string.split(",")
+                    return (command + " " + class_name + " " +
+                            " ".join(arguments) + '"' + value + '"')
+                else:
+                    arg_string = " ".join(parse_args)
+                    arguments = arg_string.split(", ")
+                    return (command + " " + class_name + " " +
+                            " ".join(arguments))
+        else:
+            return args
 
 
 if __name__ == '__main__':
