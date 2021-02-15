@@ -95,6 +95,10 @@ class HBNBCommand(cmd.Cmd):
         """[update <class name> <id> <attribute name> "<attribute value>"]:
         Updates an attribute of an instance."""
         arg = parsing(args)
+        integers = ["number_rooms", "number_bathrooms", "max_guest",
+                    "price_by_night"]
+        floats = ["latitude", "longitude"]
+
         try:
             if arg[0] in classes.keys():
                 key = arg[0] + "."
@@ -119,8 +123,23 @@ class HBNBCommand(cmd.Cmd):
         elif len(arg) == 3:
             print("** value missing **")
         else:
-            setattr(obj, arg[2], type(arg[2])(arg[3]))
-            storage.save()
+            arg_test = args.split("\"")
+            arg_zero = arg_test[0].split()
+            if len(arg_zero) == 3 :
+                if arg[2] in integers:
+                    try:
+                        arg[3] = int(arg[3])
+                    except:
+                        print("*** Wrong type: {}".format(arg[3]))
+                if arg[2] in floats:
+                    try:
+                        arg[3] = float(arg[3])
+                    except:
+                        print("*** Wrong type: {}".format(arg[3]))
+                setattr(obj, arg[2], arg[3])
+                storage.save()
+            else:
+                print("*** Unknown syntax: {}".format(args))
 
     def do_quit(self, args):
         """[quit]: Exits the program."""
