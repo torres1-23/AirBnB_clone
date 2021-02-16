@@ -167,6 +167,9 @@ class TestFileStorage03(unittest.TestCase):
             storage.save(None)
         with self.assertRaises(TypeError):
             storage.reload(None)
+
+    def test_10(self):
+        """Check correct error Rises."""
         self.assertRaises(FileNotFoundError, storage.reload())
 
     @classmethod
