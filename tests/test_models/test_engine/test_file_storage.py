@@ -31,7 +31,6 @@ class TestFileStorage01(unittest.TestCase):
         """Check correct priv class attr."""
         file_path = FileStorage._FileStorage__file_path
         self.assertEqual(type(file_path), str)
-        self.assertEqual(file_path, "instance.json")
 
     def test_03(self):
         """Check correct priv class attr."""
