@@ -4,7 +4,7 @@
 Usage:
     To be used with the unittest module, can be use it with
     "python3 -m unittest discover tests" command or
-    "python3 -m unittest tests/test_models/test_file_storage.py"
+    "python3 -m unittest tests/test_models/test_engine/test_file_storage.py"
 """
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
@@ -56,16 +56,10 @@ class TestFileStorage02(unittest.TestCase):
         with self.assertRaises(TypeError):
             dictionary = storage.all(None)
 
-    @classmethod
-    def tearDown(self):
-        try:
-            os.remove("instance.json")
-        except IOError:
-            pass
-
 
 class TestFileStorage03(unittest.TestCase):
-    """Check correct implementation of new() method."""
+    """Check correct implementation of new(), save() and reload()
+    method."""
     obj_dict = storage.all()
 
     def test_01(self):
@@ -111,9 +105,67 @@ class TestFileStorage03(unittest.TestCase):
         self.assertIn(key, self.obj_dict.keys())
 
     def test_07(self):
+        """Check correct implementation of save() method"""
+        bm = BaseModel()
+        us = User()
+        st = State()
+        pl = Place()
+        cy = City()
+        am = Amenity()
+        rv = Review()
+        storage.new(bm)
+        storage.new(us)
+        storage.new(st)
+        storage.new(pl)
+        storage.new(cy)
+        storage.new(am)
+        storage.new(rv)
+        storage.save()
+        with open("instance.json", "r") as sf:
+            save_text = sf.read()
+            self.assertIn("BaseModel." + bm.id, save_text)
+            self.assertIn("User." + us.id, save_text)
+            self.assertIn("State." + st.id, save_text)
+            self.assertIn("Place." + pl.id, save_text)
+            self.assertIn("City." + cy.id, save_text)
+            self.assertIn("Amenity." + am.id, save_text)
+            self.assertIn("Review." + rv.id, save_text)
+
+    def test_08(self):
+        """Check correct implementation of reload() method"""
+        bm = BaseModel()
+        us = User()
+        st = State()
+        pl = Place()
+        cy = City()
+        am = Amenity()
+        rv = Review()
+        storage.new(bm)
+        storage.new(us)
+        storage.new(st)
+        storage.new(pl)
+        storage.new(cy)
+        storage.new(am)
+        storage.new(rv)
+        storage.save()
+        storage.reload()
+        self.assertIn("BaseModel." + bm.id, self.obj_dict.keys())
+        self.assertIn("User." + us.id, self.obj_dict.keys())
+        self.assertIn("State." + st.id, self.obj_dict.keys())
+        self.assertIn("Place." + pl.id, self.obj_dict.keys())
+        self.assertIn("City." + cy.id, self.obj_dict.keys())
+        self.assertIn("Amenity." + am.id, self.obj_dict.keys())
+        self.assertIn("Review." + rv.id, self.obj_dict.keys())
+
+    def test_09(self):
         """Check correct error Rises."""
         with self.assertRaises(TypeError):
             storage.new(BaseModel(), 1)
+        with self.assertRaises(TypeError):
+            storage.save(None)
+        with self.assertRaises(TypeError):
+            storage.reload(None)
+        self.assertRaises(FileNotFoundError, storage.reload())
 
     @classmethod
     def tearDown(self):
@@ -123,14 +175,5 @@ class TestFileStorage03(unittest.TestCase):
             pass
 
 
-class TestFileStorage04(unittest.TestCase):
-    """Check correct implementation of save() method."""
-    def test_01(self):
-        pass
-
-    @classmethod
-    def tearDown(self):
-        try:
-            os.remove("instance.json")
-        except IOError:
-            pass
+if __name__ == "__main__":
+    unittest.main()
