@@ -95,7 +95,9 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, args):
         """[update <class name> <id> <attribute name> "<attribute value>"]:
-        Updates an attribute of an instance."""
+        Updates an attribute of an instance.
+        [<class name>.update(<id>, <dictionary representation>)]:
+        Updates attributes of instance based on a dictionary"""
         try:
             arg = parsing(args)
             integers = ["number_rooms", "number_bathrooms", "max_guest",
@@ -126,25 +128,32 @@ class HBNBCommand(cmd.Cmd):
             elif len(arg) == 3:
                 print("** value missing **")
             else:
-                arg_test = args.split("\"")
-                arg_zero = split(arg_test[0])
-                if len(arg_zero) == 3:
-                    if arg[2] in integers:
-                        try:
-                            arg[3] = int(arg[3])
-                        except:
-                            print("*** Unknown syntax: {}".format(arg[3]))
-                    if arg[2] in floats:
-                        try:
-                            arg[3] = float(arg[3])
-                        except:
-                            print("*** Unknown syntax: {}".format(arg[3]))
-                    setattr(obj, arg[2], arg[3])
-                    storage.save()
-                else:
-                    print("*** Unknown syntax: {}".format(args))
+                if arg[2] in integers:
+                    try:
+                        arg[3] = int(arg[3])
+                    except:
+                        print("*** Unknown syntax: {}".format(arg[3]))
+                if arg[2] in floats:
+                    try:
+                        arg[3] = float(arg[3])
+                    except:
+                        print("*** Unknown syntax: {}".format(arg[3]))
+                setattr(obj, arg[2], arg[3])
+                storage.save()
         except ValueError:
             print("*** Unknown syntax: {}".format(args))
+
+    def do_update_dict(self, args):
+        """Updates an instance based on id with dictionary"""
+        parse_braces = args.split("{")
+        class_id = parse_braces[0]
+        dict_to_parse = parse_braces[1]
+        dict_to_parse = dict_to_parse[:-1]
+        dict_to_parse = dict_to_parse.split(",")
+        for element in dict_to_parse:
+            name_value = element.split(":")
+            string = class_id + " ".join(name_value)
+            self.do_update(string)
 
     def do_count(self, args):
         """[<class name>.count()]: Retrieves number of instances of a class"""
@@ -172,6 +181,8 @@ class HBNBCommand(cmd.Cmd):
         """Parses alternative input format"""
         open_par = args.count("(")
         closed_par = args.count(")")
+        open_braces = args.count("{")
+        closed_braces = args.count("}")
         if open_par == 1 and closed_par == 1:
             parse_dot = args.split(".")
             class_name = parse_dot[0]
@@ -184,9 +195,14 @@ class HBNBCommand(cmd.Cmd):
             if command != "update":
                 return command + " " + class_name + " " + " ".join(parse_args)
             else:
-                if len(parse_args) == 3:
+                if open_braces == 1 and closed_braces == 1:
+                    command += '_dict'
+                    id = parse_args[0][:-1]
+                    return (command + " " + class_name + " " + id + " " +
+                            " ".join(parse_args[1:]))
+                elif len(parse_args) == 3:
                     value = parse_args[-1]
-                    arg_string = " ".join(parse_args[0:2])
+                    arg_string = " ".join(parse_args[:2])
                     arguments = arg_string.split(",")
                     return (command + " " + class_name + " " +
                             " ".join(arguments) + '"' + value + '"')
