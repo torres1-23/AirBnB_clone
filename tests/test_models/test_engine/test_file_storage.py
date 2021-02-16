@@ -171,6 +171,8 @@ class TestFileStorage03(unittest.TestCase):
         """Check correct error Rises."""
         with self.assertRaises(AttributeError):
             storage.new(None)
+        with self.assertRaises(AttributeError):
+            storage.new(BaseModel())
 
     def test_11(self):
         """Check correct error Rises."""
