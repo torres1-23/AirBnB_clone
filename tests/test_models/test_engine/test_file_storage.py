@@ -196,8 +196,8 @@ class TestFileStorage03(unittest.TestCase):
 
     def test_14(self):
         """Check correct error Rises."""
-        with self.assertRaises(AttributeError):
-            storage.new([])
+        with self.assertRaises(TypeError):
+            storage.new(BaseModel(), 1)
 
     @classmethod
     def tearDown(self):
