@@ -29,21 +29,24 @@ class TestFileStorage01(unittest.TestCase):
     def test_02(self):
         """Check correct priv class attr."""
         file_path = FileStorage._FileStorage__file_path
-        objects_dict = FileStorage._FileStorage__objects
         self.assertEqual(type(file_path), str)
         self.assertEqual(file_path, "instance.json")
-        self.assertEqual(type(objects_dict), dict)
 
     def test_03(self):
+        """Check correct priv class attr."""
+        objects_dict = FileStorage._FileStorage__objects
+        self.assertEqual(type(objects_dict), dict)
+
+    def test_04(self):
         """Check correct storage instantiation."""
         self.assertEqual(type(storage), FileStorage)
 
-    def test_04(self):
+    def test_05(self):
         """Check error raises."""
         with self.assertRaises(TypeError):
             FileStorage(None)
 
-    def test_05(self):
+    def test_06(self):
         """Check error raises."""
         with self.assertRaises(TypeError):
             FileStorage(43)
@@ -110,6 +113,13 @@ class TestFileStorage03(unittest.TestCase):
         self.assertIn(key, self.obj_dict.keys())
 
     def test_07(self):
+        """Check object type Amenity newly created in __objects"""
+        a1 = Amenity()
+        storage.new(a1)
+        key = "Amenity." + a1.id
+        self.assertIn(key, self.obj_dict.keys())
+
+    def test_08(self):
         """Check correct implementation of save() method"""
         bm = BaseModel()
         us = User()
@@ -136,7 +146,7 @@ class TestFileStorage03(unittest.TestCase):
             self.assertIn("Amenity." + am.id, save_text)
             self.assertIn("Review." + rv.id, save_text)
 
-    def test_08(self):
+    def test_09(self):
         """Check correct implementation of reload() method"""
         bm = BaseModel()
         us = User()
@@ -162,27 +172,27 @@ class TestFileStorage03(unittest.TestCase):
         self.assertIn("Amenity." + am.id, self.obj_dict.keys())
         self.assertIn("Review." + rv.id, self.obj_dict.keys())
 
-    def test_09(self):
+    def test_10(self):
         """Check correct error Rises."""
         with self.assertRaises(TypeError):
             storage.new(BaseModel(), 1)
 
-    def test_10(self):
+    def test_11(self):
         """Check correct error Rises."""
         with self.assertRaises(AttributeError):
             storage.new(None)
 
-    def test_11(self):
+    def test_12(self):
         """Check correct error Rises."""
         with self.assertRaises(TypeError):
             storage.save(None)
 
-    def test_12(self):
+    def test_13(self):
         """Check correct error Rises."""
         with self.assertRaises(TypeError):
             storage.reload(None)
 
-    def test_13(self):
+    def test_14(self):
         """Check correct error Rises."""
         self.assertRaises(FileNotFoundError, storage.reload())
 
