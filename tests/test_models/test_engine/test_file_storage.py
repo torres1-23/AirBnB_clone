@@ -199,6 +199,7 @@ class TestFileStorage03(unittest.TestCase):
 
     @classmethod
     def tearDown(self):
+        """Deletes instance file."""
         try:
             os.remove("instance.json")
         except IOError:
