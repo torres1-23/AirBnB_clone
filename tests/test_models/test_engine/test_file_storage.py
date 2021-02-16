@@ -151,6 +151,7 @@ class TestFileStorage03(unittest.TestCase):
     def test_09(self):
         """Check correct implementation of reload() method"""
         obj_dict = storage.all()
+        storage.reload()
         bm = BaseModel()
         us = User()
         st = State()
