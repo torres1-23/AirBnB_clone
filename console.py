@@ -43,8 +43,9 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, args):
         """[show <class name> <id>]: Prints an instance as a string"""
         arg = parsing(args)
-        if len(arg[0]) == 0:
+        if len(arg) == 0:
             print("** class name missing **")
+            return
         if arg[0] in classes.keys():
             if len(arg) == 2:
                 key = arg[0] + "." + arg[1]
@@ -60,8 +61,9 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, args):
         """[destroy <class name> <id>]: Deletes an instance"""
         arg = parsing(args)
-        if len(arg[0]) == 0:
+        if len(arg) == 0:
             print("** class name missing **")
+            return
         if arg[0] in classes.keys():
             if len(arg) == 2:
                 key = arg[0] + "." + arg[1]
