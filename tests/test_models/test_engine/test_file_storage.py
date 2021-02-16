@@ -63,59 +63,66 @@ class TestFileStorage02(unittest.TestCase):
 class TestFileStorage03(unittest.TestCase):
     """Check correct implementation of new(), save() and reload()
     method."""
-    obj_dict = storage.all()
 
     def test_01(self):
         """Check object type BaseModel newly created in __objects"""
+        obj_dict = storage.all()
         bm1 = BaseModel()
         storage.new(bm1)
         key = "BaseModel." + bm1.id
-        self.assertIn(key, self.obj_dict.keys())
+        self.assertIn(key, obj_dict.keys())
 
     def test_02(self):
         """Check object type User newly created in __objects"""
+        obj_dict = storage.all()
         u1 = User()
         storage.new(u1)
         key = "User." + u1.id
-        self.assertIn(key, self.obj_dict.keys())
+        self.assertIn(key, obj_dict.keys())
 
     def test_03(self):
         """Check object type State newly created in __objects"""
+        obj_dict = storage.all()
         s1 = State()
         storage.new(s1)
         key = "State." + s1.id
-        self.assertIn(key, self.obj_dict.keys())
+        self.assertIn(key, obj_dict.keys())
 
     def test_04(self):
         """Check object type City newly created in __objects"""
+        obj_dict = storage.all()
         c1 = City()
         storage.new(c1)
         key = "City." + c1.id
-        self.assertIn(key, self.obj_dict.keys())
+        self.assertIn(key, obj_dict.keys())
 
     def test_05(self):
         """Check object type Place newly created in __objects"""
+        obj_dict = storage.all()
         p1 = Place()
         storage.new(p1)
         key = "Place." + p1.id
-        self.assertIn(key, self.obj_dict.keys())
+        self.assertIn(key, obj_dict.keys())
 
     def test_06(self):
         """Check object type Review newly created in __objects"""
+        obj_dict = storage.all()
         r1 = Review()
         storage.new(r1)
         key = "Review." + r1.id
-        self.assertIn(key, self.obj_dict.keys())
+        self.assertIn(key, obj_dict.keys())
 
     def test_07(self):
         """Check object type Amenity newly created in __objects"""
+        obj_dict = storage.all()
         a1 = Amenity()
         storage.new(a1)
         key = "Amenity." + a1.id
-        self.assertIn(key, self.obj_dict.keys())
+        self.assertIn(key, obj_dict.keys())
 
     def test_08(self):
         """Check correct implementation of save() method"""
+        obj_dict = storage.all()
         bm = BaseModel()
         us = User()
         st = State()
@@ -143,6 +150,7 @@ class TestFileStorage03(unittest.TestCase):
 
     def test_09(self):
         """Check correct implementation of reload() method"""
+        obj_dict = storage.all()
         bm = BaseModel()
         us = User()
         st = State()
@@ -159,13 +167,13 @@ class TestFileStorage03(unittest.TestCase):
         storage.new(rv)
         storage.save()
         storage.reload()
-        self.assertIn("BaseModel." + bm.id, self.obj_dict.keys())
-        self.assertIn("User." + us.id, self.obj_dict.keys())
-        self.assertIn("State." + st.id, self.obj_dict.keys())
-        self.assertIn("Place." + pl.id, self.obj_dict.keys())
-        self.assertIn("City." + cy.id, self.obj_dict.keys())
-        self.assertIn("Amenity." + am.id, self.obj_dict.keys())
-        self.assertIn("Review." + rv.id, self.obj_dict.keys())
+        self.assertIn("BaseModel." + bm.id, obj_dict.keys())
+        self.assertIn("User." + us.id, obj_dict.keys())
+        self.assertIn("State." + st.id, obj_dict.keys())
+        self.assertIn("Place." + pl.id, obj_dict.keys())
+        self.assertIn("City." + cy.id, obj_dict.keys())
+        self.assertIn("Amenity." + am.id, obj_dict.keys())
+        self.assertIn("Review." + rv.id, obj_dict.keys())
 
     def test_10(self):
         """Check correct error Rises."""
@@ -198,6 +206,7 @@ class TestFileStorage03(unittest.TestCase):
             os.remove("instance.json")
         except IOError:
             pass
+        FileStorage._FileStorage__objects = {}
 
 FileStorage._FileStorage__objects = {}
 
