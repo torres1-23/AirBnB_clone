@@ -198,8 +198,8 @@ class HBNBCommand(cmd.Cmd):
                 if open_braces == 1 and closed_braces == 1:
                     command += '_dict'
                     id_string = parse_args[0][:-1]
-                    return (command + " " + class_name + " " + id_string + " " +
-                            " ".join(parse_args[1:]))
+                    return (command + " " + class_name + " " + id_string +
+                            " " + " ".join(parse_args[1:]))
                 elif len(parse_args) == 3:
                     value = parse_args[-1]
                     arg_string = " ".join(parse_args[:2])
