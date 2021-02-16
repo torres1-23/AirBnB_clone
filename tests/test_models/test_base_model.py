@@ -163,3 +163,7 @@ class TestBaseModel03(unittest.TestCase):
         sleep(2)
         base2.save()
         self.assertNotEqual(base2.created_at, base2.updated_at)
+
+
+if __name__ == "__main__":
+    unittest.main()

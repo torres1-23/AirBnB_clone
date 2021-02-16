@@ -128,3 +128,7 @@ class TestState03(unittest.TestCase):
     def test_to_dict(self):
         """Test if State is instanced as a dict"""
         self.assertEqual('to_dict' in dir(self.state1), True)
+
+
+if __name__ == "__main__":
+    unittest.main()
