@@ -131,12 +131,12 @@ class HBNBCommand(cmd.Cmd):
                         try:
                             arg[3] = int(arg[3])
                         except:
-                            print("*** Wrong type: {}".format(arg[3]))
+                            print("*** Unknown syntax: {}".format(arg[3]))
                     if arg[2] in floats:
                         try:
                             arg[3] = float(arg[3])
                         except:
-                            print("*** Wrong type: {}".format(arg[3]))
+                            print("*** Unknown syntax: {}".format(arg[3]))
                     setattr(obj, arg[2], arg[3])
                     storage.save()
                 else:
