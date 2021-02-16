@@ -169,25 +169,20 @@ class TestFileStorage03(unittest.TestCase):
 
     def test_10(self):
         """Check correct error Rises."""
-        with self.assertRaises(TypeError):
-            storage.new(BaseModel(), 1)
-
-    def test_11(self):
-        """Check correct error Rises."""
         with self.assertRaises(AttributeError):
             storage.new(None)
 
-    def test_12(self):
+    def test_11(self):
         """Check correct error Rises."""
         with self.assertRaises(TypeError):
             storage.save(None)
 
-    def test_13(self):
+    def test_12(self):
         """Check correct error Rises."""
         with self.assertRaises(TypeError):
             storage.reload(None)
 
-    def test_14(self):
+    def test_13(self):
         """Check correct error Rises."""
         self.assertRaises(FileNotFoundError, storage.reload())
 
