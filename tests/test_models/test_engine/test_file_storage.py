@@ -186,6 +186,11 @@ class TestFileStorage03(unittest.TestCase):
         """Check correct error Rises."""
         self.assertRaises(FileNotFoundError, storage.reload())
 
+    def test_14(self):
+        """Check correct error Rises."""
+        with self.assertRaises(AttributeError):
+            storage.new([])
+
     @classmethod
     def tearDown(self):
         """Deletes instance file."""
