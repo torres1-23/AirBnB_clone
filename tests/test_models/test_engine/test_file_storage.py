@@ -46,11 +46,6 @@ class TestFileStorage01(unittest.TestCase):
         with self.assertRaises(TypeError):
             FileStorage(None)
 
-    def test_06(self):
-        """Check error raises."""
-        with self.assertRaises(TypeError):
-            FileStorage(43)
-
 
 class TestFileStorage02(unittest.TestCase):
     """Check correct implementation of all() method."""
