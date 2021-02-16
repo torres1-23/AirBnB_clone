@@ -23,6 +23,7 @@ import json
 class TestFileStorage01(unittest.TestCase):
     """Test instantiation of FileStorage."""
     def test_01(self):
+        """Check correct with no arguments."""
         fs0 = FileStorage()
         self.assertEqual(type(fs0), FileStorage)
 
