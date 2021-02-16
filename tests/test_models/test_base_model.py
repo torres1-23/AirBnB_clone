@@ -7,6 +7,7 @@ Usage:
     "python3 -m unittest tests/test_models/test_base_model.py"
 """
 from models.base_model import BaseModel
+from time import sleep
 import unittest
 
 
@@ -23,6 +24,7 @@ class TestBase01(unittest.TestCase):
         self.assertEqual(base1.number, "89")
 
     def test_02(self):
+        base1 = BaseModel()
         base2 = BaseModel()
         self.assertNotEqual(base1.id, base2.id)
         sleep(2)
