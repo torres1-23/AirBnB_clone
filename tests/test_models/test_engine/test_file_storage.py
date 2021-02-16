@@ -42,6 +42,8 @@ class TestFileStorage01(unittest.TestCase):
         """Check error raises."""
         with self.assertRaises(TypeError):
             fs1 = FileStorage(1)
+        with self.assertRaises(TypeError):
+            FileStorage(None)
 
 
 class TestFileStorage02(unittest.TestCase):
@@ -163,7 +165,7 @@ class TestFileStorage03(unittest.TestCase):
             storage.new(BaseModel(), 1)
 
     def test_11(self):
-         """Check correct error Rises."""
+        """Check correct error Rises."""
         with self.assertRaises(AttributeError):
             storage.new(None)
         with self.assertRaises(TypeError):
