@@ -131,12 +131,12 @@ class HBNBCommand(cmd.Cmd):
                 if arg[2] in integers:
                     try:
                         arg[3] = int(arg[3])
-                    except:
+                    except Exception:
                         print("*** Unknown syntax: {}".format(arg[3]))
                 if arg[2] in floats:
                     try:
                         arg[3] = float(arg[3])
-                    except:
+                    except Exception:
                         print("*** Unknown syntax: {}".format(arg[3]))
                 setattr(obj, arg[2], arg[3])
                 storage.save()
@@ -216,6 +216,5 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    """Entry point"""
     interpreter = HBNBCommand()
     interpreter.cmdloop()
