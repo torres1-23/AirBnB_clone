@@ -41,8 +41,6 @@ class TestFileStorage01(unittest.TestCase):
     def test_04(self):
         """Check error raises."""
         with self.assertRaises(TypeError):
-            fs1 = FileStorage(1)
-        with self.assertRaises(TypeError):
             FileStorage(None)
 
 
