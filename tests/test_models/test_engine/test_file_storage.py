@@ -191,6 +191,10 @@ class TestFileStorage03(unittest.TestCase):
         with self.assertRaises(TypeError):
             storage.new(BaseModel(), 1)
 
+    def test_15(self):
+        """Check new() method implemented correctly."""
+        storage.new(BaseModel())
+
     @classmethod
     def tearDown(self):
         """Deletes instance file."""
