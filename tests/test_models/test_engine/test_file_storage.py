@@ -194,6 +194,7 @@ class TestFileStorage03(unittest.TestCase):
     def test_15(self):
         """Check new() method implemented correctly."""
         storage.new(BaseModel())
+        self.assertEqual(len(self.obj_dict), 23)
 
     @classmethod
     def tearDown(self):
