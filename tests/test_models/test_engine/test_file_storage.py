@@ -199,6 +199,7 @@ class TestFileStorage03(unittest.TestCase):
         except IOError:
             pass
 
+FileStorage._FileStorage__objects = {}
 
 if __name__ == "__main__":
     unittest.main()
