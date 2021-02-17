@@ -151,6 +151,7 @@ class TestFileStorage03(unittest.TestCase):
     def test_09(self):
         """Check correct implementation of reload() method"""
         obj_dict = storage.all()
+        storage.reload()
         bm = BaseModel()
         us = User()
         st = State()
@@ -196,8 +197,8 @@ class TestFileStorage03(unittest.TestCase):
 
     def test_14(self):
         """Check correct error Rises."""
-        with self.assertRaises(AttributeError):
-            storage.new([])
+        with self.assertRaises(TypeError):
+            storage.new(BaseModel(), 1)
 
     @classmethod
     def tearDown(self):
