@@ -161,5 +161,93 @@ class TestConsole04(unittest.TestCase):
         self.assertRaises(SystemExit, quit)
 
 
+class TestConsole_05(unittest.TestCase):
+    """Checks destroy command"""
+    def test_01(self):
+        """Checks destroy alone"""
+        return_str = "** class name missing **"
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("destroy"))
+            self.assertEqual(return_str, output.getvalue().strip())
+
+    def test_02(self):
+        """Checks destroy with no real class"""
+        return_str = "** class doesn't exist **"
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("destroy q"))
+            self.assertEqual(return_str, output.getvalue().strip())
+
+    def test_03(self):
+        """Checks destroy with real class
+        but no id"""
+        return_str = "** instance id missing **"
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("destroy BaseModel"))
+            self.assertEqual(return_str, output.getvalue().strip())
+
+    def test_04(self):
+        """Checks destroy with real class but wrong id"""
+        return_str = "** no instance found **"
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("destroy BaseModel a"))
+            self.assertEqual(return_str, output.getvalue().strip())
+
+    def test_05(self):
+        """Checks right destruction of BaseModel instance"""
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
+            ids = output.getvalue().strip()
+            self.assertIsNone(HBNBCommand().onecmd("destroy BaseModel " + ids))
+
+    def test_06(self):
+        """Checks right destruction of Amenity instance"""
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create Amenity"))
+            ids = output.getvalue().strip()
+            self.assertIsNone(HBNBCommand().onecmd("destroy Amenity " + ids))
+
+    def test_07(self):
+        """Checks right destruction of City instance"""
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create City"))
+            ids = output.getvalue().strip()
+            self.assertIsNone(HBNBCommand().onecmd("destroy City " + ids))
+
+    def test_08(self):
+        """Checks right destruction of Place instance"""
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create Place"))
+            ids = output.getvalue().strip()
+            self.assertIsNone(HBNBCommand().onecmd("destroy Place " + ids))
+
+    def test_09(self):
+        """Checks right destruction of Review instance"""
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create Review"))
+            ids = output.getvalue().strip()
+            self.assertIsNone(HBNBCommand().onecmd("destroy Review " + ids))
+
+    def test_10(self):
+        """Checks right destruction of State instance"""
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create State"))
+            ids = output.getvalue().strip()
+            self.assertIsNone(HBNBCommand().onecmd("destroy State " + ids))
+
+    def test_11(self):
+        """Checks right destruction of User instance"""
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create User"))
+            ids = output.getvalue().strip()
+            self.assertIsNone(HBNBCommand().onecmd("destroy User " + ids))
+
+    @classmethod
+    def tearDown(self):
+        """Deletes instance file."""
+        try:
+            os.remove("instance.json")
+        except IOError:
+            pass
+
 if __name__ == "__main__":
     unittest.main()
