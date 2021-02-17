@@ -20,7 +20,7 @@ import os
 import json
 
 
-class TestFileStorage01(unittest.TestCase):
+class TestFileStorage00(unittest.TestCase):
     """Test instantiation of FileStorage."""
     def test_01(self):
         """Check correct with no arguments."""
@@ -47,7 +47,7 @@ class TestFileStorage01(unittest.TestCase):
             FileStorage(None)
 
 
-class TestFileStorage02(unittest.TestCase):
+class TestFileStorage01(unittest.TestCase):
     """Check correct implementation of all() method."""
     def test_01(self):
         """Check correct type of dict."""
@@ -60,7 +60,7 @@ class TestFileStorage02(unittest.TestCase):
             dictionary = storage.all(None)
 
 
-class TestFileStorage03(unittest.TestCase):
+class TestFileStorage02(unittest.TestCase):
     """Check correct implementation of new(), save() and reload()
     method."""
 
