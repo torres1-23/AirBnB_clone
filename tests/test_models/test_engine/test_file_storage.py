@@ -20,30 +20,63 @@ import os
 import json
 import inspect
 
+my_dict = {'id': '56d43177-cc5f-4d6c-a0c1-e167f8c27337',
+           'created_at': '2017-09-28T21:03:54.052298',
+           '__class__': 'BaseModel', 'my_number': 89,
+           'updated_at': '2017-09-28T21:03:54.052302',
+           'name': 'Holberton'}
+
+
+class TestFileStorage(unittest.TestCase):
+    """Unittest for file_storage.py"""
+    storage = FileStorage()
+    path = storage._FileStorage__file_path
+    bm_instance = BaseModel(**my_dict)
+    storage.new(bm_instance)
+
+    def test_storage_isinstance(self):
+        """Tests if storage is an instance of FileStorage"""
+        self.assertIsInstance(TestFileStorage.storage, FileStorage)
+
+    def test_file_json(self):
+        """Tests for path existence"""
+        TestFileStorage.storage.save()
+        self.assertTrue(os.path.exists(TestFileStorage.path))
+
+    def test_save_another_instance(self):
+        """Tests for save another instance in path"""
+        bm2_instance = BaseModel()
+        bm2_instance.save()
+        key = type(bm2_instance).__name__ + "." + str(bm2_instance.id)
+        with open(TestFileStorage.path, mode="r", encoding="utf-8") as f:
+            reader = json.load(f)
+        self.assertEqual(
+            reader[key], TestFileStorage.storage.all()[key].to_dict())
+
 
 class TestFileStorage00(unittest.TestCase):
-    """Test instantiation of FileStorage."""
+    """Tests instantiation of FileStorage."""
     def test_01(self):
-        """Check correct with no arguments."""
+        """Checks correct with no arguments."""
         fs0 = FileStorage()
         self.assertEqual(type(fs0), FileStorage)
 
     def test_02(self):
-        """Check correct priv class attr."""
+        """Checks correct priv class attr."""
         file_path = FileStorage._FileStorage__file_path
         self.assertEqual(type(file_path), str)
 
     def test_03(self):
-        """Check correct priv class attr."""
+        """Checks correct priv class attr."""
         objects_dict = FileStorage._FileStorage__objects
         self.assertEqual(type(objects_dict), dict)
 
     def test_04(self):
-        """Check correct storage instantiation."""
+        """Checks correct storage instantiation."""
         self.assertEqual(type(storage), FileStorage)
 
     def test_05(self):
-        """Check error raises."""
+        """Checks if error raises."""
         with self.assertRaises(TypeError):
             FileStorage(None)
 
@@ -51,22 +84,22 @@ class TestFileStorage00(unittest.TestCase):
 class TestFileStorage01(unittest.TestCase):
     """Check correct implementation of all() method."""
     def test_01(self):
-        """Check correct type of dict."""
+        """Checks for correct type of dict."""
         dictionary = storage.all()
         self.assertEqual(type(dictionary), dict)
 
     def test_02(self):
-        """Check error raises."""
+        """Checks if error raises."""
         with self.assertRaises(TypeError):
             dictionary = storage.all(None)
 
 
 class TestFileStorage02(unittest.TestCase):
-    """Check correct implementation of new(), save() and reload()
+    """Checks correct implementation of new(), save() and reload()
     method."""
 
     def test_01(self):
-        """Check object type BaseModel newly created in __objects"""
+        """Checks object type BaseModel newly created in __objects"""
         obj_dict = storage.all()
         bm1 = BaseModel()
         storage.new(bm1)
@@ -74,7 +107,7 @@ class TestFileStorage02(unittest.TestCase):
         self.assertIn(key, obj_dict.keys())
 
     def test_02(self):
-        """Check object type User newly created in __objects"""
+        """Checks object type User newly created in __objects"""
         obj_dict = storage.all()
         u1 = User()
         storage.new(u1)
@@ -82,7 +115,7 @@ class TestFileStorage02(unittest.TestCase):
         self.assertIn(key, obj_dict.keys())
 
     def test_03(self):
-        """Check object type State newly created in __objects"""
+        """Checks object type State newly created in __objects"""
         obj_dict = storage.all()
         s1 = State()
         storage.new(s1)
@@ -90,7 +123,7 @@ class TestFileStorage02(unittest.TestCase):
         self.assertIn(key, obj_dict.keys())
 
     def test_04(self):
-        """Check object type City newly created in __objects"""
+        """Checks object type City newly created in __objects"""
         obj_dict = storage.all()
         c1 = City()
         storage.new(c1)
@@ -98,7 +131,7 @@ class TestFileStorage02(unittest.TestCase):
         self.assertIn(key, obj_dict.keys())
 
     def test_05(self):
-        """Check object type Place newly created in __objects"""
+        """Checks object type Place newly created in __objects"""
         obj_dict = storage.all()
         p1 = Place()
         storage.new(p1)
@@ -106,7 +139,7 @@ class TestFileStorage02(unittest.TestCase):
         self.assertIn(key, obj_dict.keys())
 
     def test_06(self):
-        """Check object type Review newly created in __objects"""
+        """Checks object type Review newly created in __objects"""
         obj_dict = storage.all()
         r1 = Review()
         storage.new(r1)
@@ -114,7 +147,7 @@ class TestFileStorage02(unittest.TestCase):
         self.assertIn(key, obj_dict.keys())
 
     def test_07(self):
-        """Check object type Amenity newly created in __objects"""
+        """Checks object type Amenity newly created in __objects"""
         obj_dict = storage.all()
         a1 = Amenity()
         storage.new(a1)
@@ -122,7 +155,7 @@ class TestFileStorage02(unittest.TestCase):
         self.assertIn(key, obj_dict.keys())
 
     def test_08(self):
-        """Check correct implementation of save() method"""
+        """Checks correct implementation of save() method"""
         obj_dict = storage.all()
         bm = BaseModel()
         us = User()
@@ -150,7 +183,7 @@ class TestFileStorage02(unittest.TestCase):
             self.assertIn("Review." + rv.id, save_text)
 
     def test_09(self):
-        """Check correct implementation of reload() method"""
+        """Checks correct implementation of reload() method"""
         obj_dict = storage.all()
         storage.reload()
         bm = BaseModel()
@@ -178,31 +211,31 @@ class TestFileStorage02(unittest.TestCase):
         self.assertIn("Review." + rv.id, obj_dict.keys())
 
     def test_10(self):
-        """Check correct error Rises."""
+        """Checks if correct error Rises."""
         with self.assertRaises(AttributeError):
             storage.new(None)
 
     def test_11(self):
-        """Check correct error Rises."""
+        """Checks if correct error Rises."""
         with self.assertRaises(TypeError):
             storage.save(None)
 
     def test_12(self):
-        """Check correct error Rises."""
+        """Checks if correct error Rises."""
         with self.assertRaises(TypeError):
             storage.reload(None)
 
     def test_13(self):
-        """Check correct error Rises."""
+        """Checks if correct error Rises."""
         self.assertRaises(FileNotFoundError, storage.reload())
 
     def test_14(self):
-        """Check correct error Rises."""
+        """Checks if correct error Rises."""
         with self.assertRaises(TypeError):
             storage.new(BaseModel(), 1)
 
     def test_15(self):
-        """Test reload function"""
+        """Tests reload function"""
         filename = "instance.json"
         mymodel = BaseModel()
         my_obj = mymodel.__class__.__name__ + '.'+mymodel.id
@@ -211,7 +244,6 @@ class TestFileStorage02(unittest.TestCase):
         storage.save()
         self.assertTrue(os.path.exists(filename))
         self.assertTrue(len(storage.all()) == 1)
-        # Empty the __objects to check if reload works
         FileStorage._FileStorage__objects = {}
         self.assertEqual(storage.all(), {})
         self.assertTrue(len(storage.all()) == 0)
@@ -225,7 +257,7 @@ class TestFileStorage02(unittest.TestCase):
         self.assertTrue(len(storage.all()) == 1)
 
     def test_engine_010(self):
-        """Test reload whit all classes"""
+        """Tests reloading with all classes"""
         filename = "instance.json"
         baseobj = BaseModel()
         userobj = User()
@@ -266,39 +298,6 @@ class TestFileStorage02(unittest.TestCase):
             pass
         FileStorage._FileStorage__objects = {}
 
-
-my_dict = {'id': '56d43177-cc5f-4d6c-a0c1-e167f8c27337',
-           'created_at': '2017-09-28T21:03:54.052298',
-           '__class__': 'BaseModel', 'my_number': 89,
-           'updated_at': '2017-09-28T21:03:54.052302',
-           'name': 'Holberton'}
-
-
-class TestFileStorage(unittest.TestCase):
-    """Unittest for file_storage.py"""
-    storage = FileStorage()
-    path = storage._FileStorage__file_path
-    bm_instance = BaseModel(**my_dict)
-    storage.new(bm_instance)
-
-    def test_storage_isinstance(self):
-        """Tests if storage is an instance of FileStorage"""
-        self.assertIsInstance(TestFileStorage.storage, FileStorage)
-
-    def test_file_json(self):
-        """Tests for path existence"""
-        TestFileStorage.storage.save()
-        self.assertTrue(os.path.exists(TestFileStorage.path))
-
-    def test_save_another_instance(self):
-        """Tests for save another instance in path"""
-        bm2_instance = BaseModel()
-        bm2_instance.save()
-        key = type(bm2_instance).__name__ + "." + str(bm2_instance.id)
-        with open(TestFileStorage.path, mode="r", encoding="utf-8") as f:
-            reader = json.load(f)
-        self.assertEqual(
-            reader[key], TestFileStorage.storage.all()[key].to_dict())
 
 if __name__ == "__main__":
     unittest.main()
