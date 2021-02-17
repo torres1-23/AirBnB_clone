@@ -9,13 +9,23 @@ from models.engine.file_storage import FileStorage
 from models import storage
 from console import HBNBCommand
 import unittest
+from unittest.mock import create_autospec
 import os
 from io import StringIO
 from unittest.mock import patch
+import sys
 
 
-class TestHBNBCommand_01(unittest.TestCase):
+class TestConsole01(unittest.TestCase):
     """Checks instantiation of HBNBCommand"""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.remove("instance.json")
+        except Exception:
+            pass
+
     def test_01(self):
         """Check right attributes"""
         prompt = HBNBCommand.prompt
@@ -28,7 +38,7 @@ class TestHBNBCommand_01(unittest.TestCase):
         self.assertEqual(type(console), HBNBCommand)
 
 
-class TestHBNBCommand_02(unittest.TestCase):
+class TestConsole02(unittest.TestCase):
     """Checks exit commands"""
     def test_01(self):
         """Checks quit comand"""
@@ -41,7 +51,7 @@ class TestHBNBCommand_02(unittest.TestCase):
             self.assertTrue(HBNBCommand().onecmd("EOF"))
 
 
-class TestHBNBCommand_03(unittest.TestCase):
+class TestConsole03(unittest.TestCase):
     """Checks help command"""
     def test_01(self):
         """Tests for correct help output"""
@@ -52,6 +62,23 @@ class TestHBNBCommand_03(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("help"))
             self.assertEqual(help_str, output.getvalue().strip())
+
+
+class TestConsole04(unittest.TestCase):
+    """Tests stdin, create and exit"""
+    def setUp(self):
+        """Mocks stdin and stdout"""
+        self.mock_stdin = create_autospec(sys.stdin)
+        self.mock_stdout = create_autospec(sys.stdout)
+
+    def create(self, server=None):
+        """Tests create method"""
+        return HBNBCommand(stdin=self.mock_stdin, stdout=self.mock_stdout)
+
+    def test_exit(self):
+        """Tests exit method"""
+        cmd = self.create()
+        self.assertRaises(SystemExit, quit)
 
 
 if __name__ == "__main__":
