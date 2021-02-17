@@ -1,253 +1,331 @@
-#!/usr/bin/python3
-"""This module tests console.py file.
-Usage:
-    To be used with the unittest module, can be use it with
-    "python3 -m unittest discover tests" command or
-    "python3 -m unittest tests/test_console.py"
-"""
-from models.engine.file_storage import FileStorage
-from models import storage
 from console import HBNBCommand
 import unittest
-from unittest.mock import create_autospec
-import os
-from io import StringIO
-from unittest.mock import patch
+from unittest.mock import create_autospec, patch
 import sys
+from io import StringIO
+import os
+import pep8
 
 
-class TestConsole01(unittest.TestCase):
-    """Checks instantiation of HBNBCommand"""
+class TestConsole00(unittest.TestCase):
+
+    classes = ["BaseModel", "User", "State", "City",
+               "Amenity", "Place", "Review"]
+
+    def test_pep8(self):
+        """ test pep8 """
+        style = pep8.StyleGuide(quiet=True)
+        file_console = "console.py"
+        file_test_console = "tests/test_console.py"
+        check = style.check_files([file_console, file_test_console])
+        self.assertEqual(check.total_errors, 0,
+                         "Found code style errors (and warning).")
 
     @classmethod
-    def setUp(self):
+    def teardown(cls):
+        """ final statement """
         try:
-            os.remove("instance.json")
-        except Exception:
+            os.remove("file.json")
+        except:
             pass
 
-    def test_01(self):
-        """Check right attributes"""
-        prompt = HBNBCommand.prompt
-        self.assertEqual(prompt, "(hbnb) ")
-        self.assertEqual(type(prompt), str)
-
-    def test_02(self):
-        """Check right type of newly created obj"""
-        console = HBNBCommand()
-        self.assertEqual(type(console), HBNBCommand)
-
-
-class TestConsole02(unittest.TestCase):
-    """Checks exit commands"""
-    def test_01(self):
-        """Checks quit comand"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertTrue(HBNBCommand().onecmd("quit"))
-
-    def test_02(self):
-        """Checks EOF command"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertTrue(HBNBCommand().onecmd("EOF"))
-
-
-class TestConsole_03(unittest.TestCase):
-    """Checks help command"""
-    def test_01(self):
-        """Checks help alone"""
-        help_str = ("Documented commands (type help <topic>):\n"
-                    "========================================\n"
-                    "EOF  all  count  create  destroy  help  quit  show  "
-                    "update  update_dict")
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_02(self):
-        """Checks help EOF"""
-        help_str = "EOF signal to exit the console."
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help EOF"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_03(self):
-        """Checks help all"""
-        help_str = ("[all <class name> / all]: Prints all string repr of all "
-                    "instances")
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help all"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_04(self):
-        """Checks help count"""
-        help_str = ("[<class name>.count()]: Retrieves number of instances of "
-                    "a class")
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help count"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_05(self):
-        """Checks help create"""
-        help_str = "[create <class name>]: Creates a new instance of a class."
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help create"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_06(self):
-        """Checks help destroy"""
-        help_str = "[destroy <class name> <id>]: Deletes an instance"
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help destroy"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_07(self):
-        """Checks help help"""
-        help_str = ("List available commands with \"help\" or detailed help "
-                    "with \"help cmd\".")
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help help"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_08(self):
-        """Checks help quit"""
-        help_str = "[quit]: Exits the program."
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help quit"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_09(self):
-        """Checks help show"""
-        help_str = "[show <class name> <id>]: Prints an instance as a string"
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help show"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_10(self):
-        """Checks help update"""
-        help_str = ("[update <class name> <id> <attribute name> \""
-                    "<attribute value>\"]:\n"
-                    "        Updates an attribute of an instance.\n"
-                    "        [<class name>.update(<id>, <dictionary "
-                    "representation>)]:\n"
-                    "        Updates attributes of instance based on a "
-                    "dictionary")
-
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help update"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-    def test_11(self):
-        """Checks help update_dict"""
-        help_str = "Updates an instance based on id with dictionary"
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help update_dict"))
-            self.assertEqual(help_str, output.getvalue().strip())
-
-
-class TestConsole04(unittest.TestCase):
-    """Tests stdin, create and exit"""
     def setUp(self):
-        """Mocks stdin and stdout"""
         self.mock_stdin = create_autospec(sys.stdin)
         self.mock_stdout = create_autospec(sys.stdout)
 
-    def create(self, server=None):
-        """Tests create method"""
+    def create_session(self, server=None):
         return HBNBCommand(stdin=self.mock_stdin, stdout=self.mock_stdout)
 
+    def test_create(self):
+        """Tesing `active` command"""
+        cli = self.create_session()
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('create'))
+        self.assertEqual('** class name missing **',
+                         Output.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('create hola'))
+        self.assertEqual("** class doesn't exist **",
+                         Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+            self.assertEqual(36, len(Output.getvalue().strip()))
+
+    def test_show(self):
+        cli = self.create_session()
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('show'))
+        self.assertEqual('** class name missing **',
+                         Output.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('show hola'))
+        self.assertEqual("** class doesn't exist **",
+                         Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('show {}'.format(cls)))
+            self.assertEqual("** instance id missing **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('show {} 123456'.format(cls)))
+            self.assertEqual("** no instance found **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('show {} {}'.format(cls, ids)))
+            self.assertTrue(ids in Output.getvalue().strip())
+            self.assertTrue(cls in Output.getvalue().strip())
+            self.assertTrue("created_at" in Output.getvalue().strip())
+            self.assertTrue("updated_at" in Output.getvalue().strip())
+
+        """ <class>.show(<id>) method """
+
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.show()'.format(cls)))
+            self.assertEqual("** instance id missing **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.show("23456")'.format(cls)))
+            self.assertEqual("** no instance found **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.show("{}")'.format(cls, ids)))
+            self.assertTrue(ids in Output.getvalue().strip())
+            self.assertTrue(cls in Output.getvalue().strip())
+            self.assertTrue("created_at" in Output.getvalue().strip())
+            self.assertTrue("updated_at" in Output.getvalue().strip())
+
+    def test_destroy(self):
+        cli = self.create_session()
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('destroy'))
+        self.assertEqual('** class name missing **',
+                         Output.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('destroy hola'))
+        self.assertEqual("** class doesn't exist **",
+                         Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('destroy {}'.format(cls)))
+            self.assertEqual("** instance id missing **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('destroy {} 123456'.format(cls)))
+            self.assertEqual("** no instance found **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('all'))
+            self.assertTrue(ids in Output.getvalue().strip())
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('destroy {} {}'.format(cls, ids)))
+            self.assertFalse(ids in Output.getvalue().strip())
+            self.assertEqual("", Output.getvalue().strip())
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('all'))
+            self.assertFalse(ids in Output.getvalue().strip())
+
+        """ <class>.destroy(<id>) method """
+
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.destroy()'.format(cls)))
+            self.assertEqual("** instance id missing **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.destroy("123456")'
+                                 .format(cls)))
+            self.assertEqual("** no instance found **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('all'))
+            self.assertTrue(ids in Output.getvalue().strip())
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.destroy("{}")'
+                                 .format(cls, ids)))
+            self.assertFalse(ids in Output.getvalue().strip())
+            self.assertEqual("", Output.getvalue().strip())
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('all'))
+            self.assertFalse(ids in Output.getvalue().strip())
+
+    def test_all(self):
+        cli = self.create_session()
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('all'))
+        self.assertEqual('[', Output.getvalue().strip()[0])
+        self.assertEqual(']', Output.getvalue().strip()[-1])
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('all hola'))
+        self.assertEqual("** class doesn't exist **",
+                         Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('all {}'.format(cls)))
+                self.assertEqual('[', Output.getvalue().strip()[0])
+                self.assertEqual(']', Output.getvalue().strip()[-1])
+            self.assertTrue(ids in Output.getvalue().strip())
+
+        """ <class>.all mode """
+
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.all()'.format(cls)))
+            self.assertEqual('[', Output.getvalue().strip()[0])
+            self.assertEqual(']', Output.getvalue().strip()[-1])
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.all()'.format(cls)))
+            self.assertTrue(ids in Output.getvalue().strip())
+
+    def test_update(self):
+        cli = self.create_session()
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('update'))
+        self.assertEqual('** class name missing **',
+                         Output.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as Output:
+            self.assertFalse(cli.onecmd('update hola'))
+        self.assertEqual("** class doesn't exist **",
+                         Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('update {}'.format(cls)))
+            self.assertEqual("** instance id missing **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('update {} 123456'.format(cls)))
+            self.assertEqual("** no instance found **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('update {} {}'.format(cls, ids)))
+            self.assertEqual("** attribute name missing **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('update {} {} attribute'
+                                 .format(cls, ids)))
+            self.assertEqual("** value missing **", Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('update {} {} attribute "test"'
+                                 .format(cls, ids)))
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('show {} {}'.format(cls, ids)))
+            self.assertTrue("attribute" in Output.getvalue().strip())
+            self.assertTrue("test" in Output.getvalue().strip())
+
+        """
+        <class name>.update(<id>, <attribute name>, <attribute value>)
+
+        method
+        """
+
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.update()'.format(cls)))
+            self.assertEqual("** instance id missing **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.update("123456")'.format(cls)))
+            self.assertEqual("** no instance found **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.update("{}")'
+                                 .format(cls, ids)))
+            self.assertEqual("** attribute name missing **",
+                             Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.update("{}", "attribute")'
+                                 .format(cls, ids)))
+            self.assertEqual("** value missing **", Output.getvalue().strip())
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.update("{}", "attr", "test")'
+                                 .format(cls, ids)))
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('show {} {}'.format(cls, ids)))
+            self.assertTrue("attr" in Output.getvalue().strip())
+            self.assertTrue("test" in Output.getvalue().strip())
+
+        """ <class name>.update(<id>, <dictionary representation>) method """
+
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+                ids = Output.getvalue().strip()
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.update("{}", {{"num": 89}})'
+                                 .format(cls, ids)))
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('show {} {}'.format(cls, ids)))
+            self.assertTrue("num" in Output.getvalue().strip())
+            self.assertTrue("89" in Output.getvalue().strip())
+
+    def test_count(self):
+        cli = self.create_session()
+        for cls in TestMyCLI.classes:
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.count()'.format(cls)))
+                number1 = int(Output.getvalue().strip())
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('create {}'.format(cls)))
+            with patch('sys.stdout', new=StringIO()) as Output:
+                self.assertFalse(cli.onecmd('{}.count()'.format(cls)))
+                number2 = int(Output.getvalue().strip())
+            self.assertTrue(number2 == number1 + 1)
+
     def test_exit(self):
-        """Tests exit method"""
-        cmd = self.create()
-        self.assertRaises(SystemExit, quit)
-
-
-class TestConsole_05(unittest.TestCase):
-    """Checks destroy command"""
-    def test_01(self):
-        """Checks destroy alone"""
-        return_str = "** class name missing **"
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("destroy"))
-            self.assertEqual(return_str, output.getvalue().strip())
-
-    def test_02(self):
-        """Checks destroy with no real class"""
-        return_str = "** class doesn't exist **"
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("destroy q"))
-            self.assertEqual(return_str, output.getvalue().strip())
-
-    def test_03(self):
-        """Checks destroy with real class
-        but no id"""
-        return_str = "** instance id missing **"
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("destroy BaseModel"))
-            self.assertEqual(return_str, output.getvalue().strip())
-
-    def test_04(self):
-        """Checks destroy with real class but wrong id"""
-        return_str = "** no instance found **"
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("destroy BaseModel a"))
-            self.assertEqual(return_str, output.getvalue().strip())
-
-    def test_05(self):
-        """Checks right destruction of BaseModel instance"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
-            ids = output.getvalue().strip()
-            self.assertIsNone(HBNBCommand().onecmd("destroy BaseModel " + ids))
-
-    def test_06(self):
-        """Checks right destruction of Amenity instance"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create Amenity"))
-            ids = output.getvalue().strip()
-            self.assertIsNone(HBNBCommand().onecmd("destroy Amenity " + ids))
-
-    def test_07(self):
-        """Checks right destruction of City instance"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create City"))
-            ids = output.getvalue().strip()
-            self.assertIsNone(HBNBCommand().onecmd("destroy City " + ids))
-
-    def test_08(self):
-        """Checks right destruction of Place instance"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create Place"))
-            ids = output.getvalue().strip()
-            self.assertIsNone(HBNBCommand().onecmd("destroy Place " + ids))
-
-    def test_09(self):
-        """Checks right destruction of Review instance"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create Review"))
-            ids = output.getvalue().strip()
-            self.assertIsNone(HBNBCommand().onecmd("destroy Review " + ids))
-
-    def test_10(self):
-        """Checks right destruction of State instance"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create State"))
-            ids = output.getvalue().strip()
-            self.assertIsNone(HBNBCommand().onecmd("destroy State " + ids))
-
-    def test_11(self):
-        """Checks right destruction of User instance"""
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create User"))
-            ids = output.getvalue().strip()
-            self.assertIsNone(HBNBCommand().onecmd("destroy User " + ids))
-
-    @classmethod
-    def tearDown(self):
-        """Deletes instance file."""
-        try:
-            os.remove("instance.json")
-        except IOError:
-            pass
-
-if __name__ == "__main__":
-    unittest.main()
+        """exit command"""
+        cli = self.create_session()
+        self.assertTrue(cli.onecmd("quit"))
