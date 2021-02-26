@@ -36,12 +36,12 @@
     border-right: 1px solid #DDD;
 }
 
-.filters h3, .filters h3{
+.locations h3, .amenities h3{
     font-weight: 600;
     margin-bottom: 0;
 }
 
-.filters h4, .filters h4{
+.locations h4, .amenities h4{
     font-weight: 400;
     font-size: 14px;
     margin-top: 0;
