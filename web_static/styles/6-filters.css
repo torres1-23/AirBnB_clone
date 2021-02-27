@@ -90,3 +90,12 @@
 .amenities:hover .popover{
     display: block;
 }
+
+.amenities .popover li:hover{
+    color: #FF5A5F;
+}
+
+.locations .popover h2:hover,
+.locations .popover .cities li:hover{
+    color: #FF5A5F;
+}
