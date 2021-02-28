@@ -25,7 +25,7 @@
     opacity: 0.9;
 }
 
-.locations, .amenities{
+.filters .locations, .filters .amenities{
     display: inline-block;
     height: 100%;
     width: 25%;
@@ -67,7 +67,7 @@
     margin-bottom: 0;
 }
 
-.popover{
+.filters .popover{
     display: none;
     background-color: #FAFAFA;
     width: 103.5%;
