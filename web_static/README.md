@@ -30,8 +30,8 @@ HTML page with same layout as before but now using CSS files.
     * **[2-header.css](./styles/2-header.css)**: for header style.
     * **[2-footer.css](./styles/2-footer.css)**: for footer style.
 * **3. Zoning done!:**\
-Index page with styles for footer and header.
-![Task 3](./images_md/task3.png)
+Index page with styles for footer and header.\
+![Task 3](./images_md/task3.png)\
   * Files:
     * **[3-index.html](./3-index.html)**
     * **[3-common.css](./styles/3-common.css)**: for global style.
@@ -62,9 +62,9 @@ Index page with styles for footer and header, now with filters section for searc
     * **[images](./images)**: Images implemented in index page.
 
 * **6. It's (h)over**\
-Index page with styles for footer and header, now with filters section for searching commodities and recommended filters boxes and dropdowns menu for recommended filters.
-![Task 61](./images_md/task61.png)
-![Task 62](./images_md/task62.png)
+Index page with styles for footer and header, now with filters section for searching commodities and recommended filters boxes and dropdowns menu for recommended filters.\
+![Task 61](./images_md/task61.png)\
+![Task 62](./images_md/task62.png)\
   * Files:
     * **[6-index.html](./6-index.html)**
     * **[4-common.css](./styles/4-common.css)**: for global style.
@@ -74,8 +74,8 @@ Index page with styles for footer and header, now with filters section for searc
     * **[images](./images)**: Images implemented in index page.
 
 * **7. Display results**\
-Index page with styles for footer and header, now with filters section for searching commodities, recommended filters boxes, dropdowns menu for recommended filters and results displayed.
-![Task 7](./images_md/task7.png)
+Index page with styles for footer and header, now with filters section for searching commodities, recommended filters boxes, dropdowns menu for recommended filters and results displayed.\
+![Task 7](./images_md/task7.png)\
   * Files:
     * **[7-index.html](./7-index.html)**
     * **[4-common.css](./styles/4-common.css)**: for global style.
@@ -86,8 +86,8 @@ Index page with styles for footer and header, now with filters section for searc
     * **[images](./images)**: Images implemented in index page.
 
 * **8. More details**\
-Index page with styles for footer and header, now with filters section for searching commodities, recommended filters boxes, dropdowns menu for recommended filters and results displayed with more info.
-![Task 8](./images_md/task8.png)
+Index page with styles for footer and header, now with filters section for searching commodities, recommended filters boxes, dropdowns menu for recommended filters and results displayed with more info.\
+![Task 8](./images_md/task8.png)\
   * Files:
     * **[8-index.html](./8-index.html)**
     * **[4-common.css](./styles/4-common.css)**: for global style.

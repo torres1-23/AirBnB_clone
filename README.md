@@ -151,7 +151,7 @@ EOF  all  create  destroy  help  quit  show  update
 ** no instance found **
 (hbnb) quit
 ```
-### Web Static
+## Web Static
 [web_static](./web_static): Contains the blueprint for the index page of AirBnB clone site.
 
 ![Task 91](./web_static/images_md/task91.png)
