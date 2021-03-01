@@ -15,7 +15,7 @@ Functionalities of this command interpreter:
 * [File Descriptions](#file-descriptions)
 * [Usage](#usage)
 * [Examples of use](#examples-of-use)
-* [Web Static](#web_static)
+* [Web Static](#web-static)
 * [Bugs](#bugs)
 * [Authors](#authors)
 * [License](#license)
@@ -151,6 +151,7 @@ EOF  all  create  destroy  help  quit  show  update
 ** no instance found **
 (hbnb) quit
 ```
+
 ## Web Static
 [web_static](./web_static): Contains the blueprint for the index page of AirBnB clone site.
 
